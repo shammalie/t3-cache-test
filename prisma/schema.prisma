@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Sensor {
+    id          String   @id @default(cuid())
+    name        String
+    lat         Float
+    lon         Float
+    description String
+    Health      Health[]
+
+    @@index([name])
+}
+
+model Health {
+    id        Int      @id @default(autoincrement())
+    sensorId  String
+    sensor    Sensor   @relation(fields: [sensorId], references: [id])
+    timestamp DateTime
+}
